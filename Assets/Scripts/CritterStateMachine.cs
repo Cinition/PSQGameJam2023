@@ -17,8 +17,6 @@ public class CritterStateMachine : MonoBehaviour
         kFleeing
     }
 
-    public float flee_radius;
-
     private CritterMovement critter_movement;
     private CritterStates   current_state;
     private float           on_state_timer;

@@ -17,14 +17,19 @@ public class CritterMovement : MonoBehaviour
     public Transform player;
     public bool      has_desitination;
     public float     flee_radius;
+    public float     tired_speed;
+    public float     wandering_speed;
+    public float     fleeing_speed;
 
     private NavMeshAgent agent;
+    private float        fleeing_timer;
 
     // Start is called before the first frame update
     void Start()
     {
         agent            = GetComponent< NavMeshAgent >();
         has_desitination = false;
+        agent.speed      = wandering_speed;
     }
 
     // Update is called once per frame
@@ -32,6 +37,13 @@ public class CritterMovement : MonoBehaviour
     {
         if( IsAtDestination() )
             has_desitination = false;
+
+        if( NeedsToFlee() )
+        {
+            fleeing_timer += Time.deltaTime;
+            float timer = 1 - math.pow( 2, -10 );
+            agent.speed = math.lerp( fleeing_speed, tired_speed, math.clamp( timer, 0.0f, 1.0f ) );
+        }
     }
 
     bool IsAtDestination()
@@ -68,8 +80,9 @@ public class CritterMovement : MonoBehaviour
 
     public void GetFleeingLocation()
     {
-        Vector3 opposite_location = new Vector3( -player.position.x, player.position.y, -player.position.z );
-        agent.destination         = opposite_location;
+        Vector3 direction     = math.normalize( transform.position - player.position );
+        Vector3 flee_position = transform.position + ( direction * 2 );
+        agent.destination         = flee_position;
         has_desitination          = true;
     }
 }
