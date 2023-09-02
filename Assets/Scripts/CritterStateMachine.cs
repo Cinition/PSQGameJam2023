@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Unity.VisualScripting;
 using UnityEditor.ShortcutManagement;
 using UnityEngine;
 using UnityEngine.AI;
@@ -15,23 +17,34 @@ public class CritterStateMachine : MonoBehaviour
         kFleeing
     }
 
+    public float flee_radius;
+
     private CritterMovement critter_movement;
     private CritterStates   current_state;
     private float           on_state_timer;
-    private bool            has_desitination;
 
     // Start is called before the first frame update
     void Start()
     {
         critter_movement = GetComponent< CritterMovement >();
         current_state    = CritterStates.kSpawn;
-        has_desitination = false;
     }
 
     // Update is called once per frame
     void Update()
     {
         on_state_timer += Time.deltaTime;
+
+        if( critter_movement.NeedsToFlee() )
+        {
+            on_state_timer = 0.0f;
+            current_state = CritterStates.kFleeing;
+        }
+        else if( current_state == CritterStates.kFleeing )
+        {
+            on_state_timer = 0.0f;
+            current_state = CritterStates.kWandering;
+        }
 
         switch( current_state )
         {
@@ -63,13 +76,18 @@ public class CritterStateMachine : MonoBehaviour
 
         on_state_timer = 0.0f;
         critter_movement.GenerateRandomLocation();
-        has_desitination = true;
 
     }
 
     void FleeingState()
     {
+        critter_movement.GetFleeingLocation();
 
+        if( on_state_timer < 4.0f )
+            return;
+
+        on_state_timer = 0.0f;
+        current_state = CritterStates.kWandering;
 
     }
 }

@@ -8,13 +8,15 @@ using UnityEngine.AI;
 using Vector3 = UnityEngine.Vector3;
 using Random = UnityEngine.Random;
 using Unity.VisualScripting;
+using Unity.Mathematics;
 
 public class CritterMovement : MonoBehaviour
 {
     public Transform map_min;
     public Transform map_max;
-    public Vector3   player_position;
+    public Transform player;
     public bool      has_desitination;
+    public float     flee_radius;
 
     private NavMeshAgent agent;
 
@@ -45,6 +47,13 @@ public class CritterMovement : MonoBehaviour
         return false;
     }
 
+    public bool NeedsToFlee()
+    {
+        float length = math.length( player.position - transform.position );
+        print( length );
+        return length < flee_radius;
+    }
+
     public void GenerateRandomLocation()
     {
         Vector3 random_location = new Vector3( 
@@ -59,7 +68,7 @@ public class CritterMovement : MonoBehaviour
 
     public void GetFleeingLocation()
     {
-        Vector3 opposite_location = new Vector3( -player_position.x, player_position.y, -player_position.z );
+        Vector3 opposite_location = new Vector3( -player.position.x, player.position.y, -player.position.z );
         agent.destination         = opposite_location;
         has_desitination          = true;
     }
