@@ -32,13 +32,12 @@ public class PlayerMovement : MonoBehaviour
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
+        moveDirection = (transform.forward * verticalInput) + (transform.right * horizontalInput);
     }
 
     private void MovePlayer()
     {
         Vector3 Velocity = new(rb.velocity.x, 0.0f, rb.velocity.z);
-
-        moveDirection = (transform.forward * verticalInput) + (transform.right * horizontalInput);
         if (Velocity.magnitude > moveSpeed)
         {
             limitedVelocity = Velocity.normalized * moveSpeed;

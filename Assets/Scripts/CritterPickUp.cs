@@ -8,11 +8,9 @@ public class CritterPickUp : MonoBehaviour
     Transform critter;
 
     public float pickUpRange;
-    public float dropForwardForce;
-    public float dropUpwardForce;
 
     private List<GameObject> heldCritters = new List<GameObject>();
-    public int maxCrittersHeld;
+    private int maxCrittersHeld = 5;
 
     void Start()
     {
@@ -54,25 +52,9 @@ public class CritterPickUp : MonoBehaviour
         foreach (GameObject critterToDrop in heldCritters)
         {
             critterToDrop.transform.SetParent(null);
-
-            Rigidbody rb = critterToDrop.GetComponent<Rigidbody>();
-
-            rb.AddForce(player.transform.forward * dropForwardForce, ForceMode.Impulse);
-            rb.AddForce(player.transform.up * dropUpwardForce, ForceMode.Impulse);
-
-            float randomX = Random.Range(-1f, 1f);
-            float randomY = Random.Range(-1f, 1f);
-            float randomZ = Random.Range(-1f, 1f);
-            rb.AddTorque(new Vector3(randomX, randomY, randomZ) * 10);
-
-            rb.isKinematic = false;
-            BoxCollider boxCollider = critterToDrop.GetComponent<BoxCollider>();
-            boxCollider.isTrigger = false;
         }
-
         heldCritters.Clear();
     }
-
     private void CheckCritters()
     {
         foreach (GameObject critterObject in critters)
