@@ -3,23 +3,21 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
-    private float moveSpeed;
+    float moveSpeed;
+    Vector3 limitedVelocity;
 
-    private float m_horizontalInput;
-    private float m_verticalInput;
+    float horizontalInput;
+    float verticalInput;
 
-    private Vector3 m_moveDirection;
+    public Vector3 moveDirection;
 
-    private Rigidbody m_rb;
-    private Vector3 m_limitedVelocity;
+    Rigidbody rb;
 
     void Start()
     {
-        m_rb = GetComponent<Rigidbody>();
-        m_rb.freezeRotation = true;
+        rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
     }
-
-    // Update is called once per frame
     void Update()
     {
         GatherInput();
@@ -32,26 +30,24 @@ public class PlayerMovement : MonoBehaviour
 
     private void GatherInput()
     {
-        m_horizontalInput = Input.GetAxisRaw("Horizontal");
-        m_verticalInput = Input.GetAxisRaw("Vertical");
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
     }
 
     private void MovePlayer()
     {
-        Vector3 m_velocity = new Vector3(m_rb.velocity.x, 0.0f, m_rb.velocity.z);
+        Vector3 Velocity = new(rb.velocity.x, 0.0f, rb.velocity.z);
 
-        m_moveDirection = (transform.forward * m_verticalInput) + (transform.right * m_horizontalInput);
-        if (m_velocity.magnitude > moveSpeed)
+        moveDirection = (transform.forward * verticalInput) + (transform.right * horizontalInput);
+        if (Velocity.magnitude > moveSpeed)
         {
-            m_limitedVelocity = m_velocity.normalized * moveSpeed;
-            m_rb.velocity = new Vector3(m_limitedVelocity.x, 0.0f, m_limitedVelocity.z);
+            limitedVelocity = Velocity.normalized * moveSpeed;
+            rb.velocity = new Vector3(limitedVelocity.x, 0.0f, limitedVelocity.z);
         }
-        if (m_moveDirection.magnitude > 1) 
+        if (moveDirection.magnitude > 1) 
         {
-            m_moveDirection = m_moveDirection.normalized;
+            moveDirection = moveDirection.normalized;
         }
-        m_rb.AddForce(moveSpeed * 10 * m_moveDirection, ForceMode.Force);
-        Debug.Log(m_moveDirection);
-        Debug.Log(m_limitedVelocity);
+        rb.AddForce(moveSpeed * 10 * moveDirection, ForceMode.Force);
     }
 }
