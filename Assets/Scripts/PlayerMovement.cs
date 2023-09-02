@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -10,9 +8,10 @@ public class PlayerMovement : MonoBehaviour
     private float m_horizontalInput;
     private float m_verticalInput;
 
-    Vector3 m_moveDirection;
+    private Vector3 m_moveDirection;
 
-    Rigidbody m_rb;
+    private Rigidbody m_rb;
+    private Vector3 m_limitedVelocity;
 
     void Start()
     {
@@ -39,7 +38,20 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer()
     {
+        Vector3 m_velocity = new Vector3(m_rb.velocity.x, 0.0f, m_rb.velocity.z);
+
         m_moveDirection = (transform.forward * m_verticalInput) + (transform.right * m_horizontalInput);
-        m_rb.AddForce(moveSpeed * 10 * m_moveDirection.normalized, ForceMode.Force);
+        if (m_velocity.magnitude > moveSpeed)
+        {
+            m_limitedVelocity = m_velocity.normalized * moveSpeed;
+            m_rb.velocity = new Vector3(m_limitedVelocity.x, 0.0f, m_limitedVelocity.z);
+        }
+        if (m_moveDirection.magnitude > 1) 
+        {
+            m_moveDirection = m_moveDirection.normalized;
+        }
+        m_rb.AddForce(moveSpeed * 10 * m_moveDirection, ForceMode.Force);
+        Debug.Log(m_moveDirection);
+        Debug.Log(m_limitedVelocity);
     }
 }
