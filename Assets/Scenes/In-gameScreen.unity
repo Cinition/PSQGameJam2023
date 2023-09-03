@@ -12478,6 +12478,28 @@ MonoBehaviour:
   waves:
   - spawn_rate: 0.5
     critter_count: 5
+  - spawn_rate: 0.5
+    critter_count: 7
+  - spawn_rate: 0.5
+    critter_count: 9
+  - spawn_rate: 0.5
+    critter_count: 10
+  - spawn_rate: 0.5
+    critter_count: 11
+  - spawn_rate: 0.5
+    critter_count: 13
+  - spawn_rate: 0.5
+    critter_count: 15
+  - spawn_rate: 0.5
+    critter_count: 16
+  - spawn_rate: 0.5
+    critter_count: 17
+  - spawn_rate: 0.5
+    critter_count: 18
+  - spawn_rate: 0.5
+    critter_count: 19
+  - spawn_rate: 0.5
+    critter_count: 25
   critters:
   - {fileID: 3343928936101929151, guid: 92f6d7d83a6ee9945a551ffb72011d74, type: 3}
   - {fileID: 4856494916445574881, guid: 2ffbbf2de14bbb64bb8751ffa37e00c9, type: 3}
