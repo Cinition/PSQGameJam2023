@@ -16,7 +16,7 @@ public class SC_MainMenu : MonoBehaviour
     public void PlayButton()
     {
         // Play Button has been pressed, here you can initialize your game (For example Load a Scene called GameLevel etc.)
-        UnityEngine.SceneManagement.SceneManager.LoadScene("GameLevel");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("In-gameScreen");
     }
 
     public void CreditsButton()
