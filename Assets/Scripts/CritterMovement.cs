@@ -80,6 +80,9 @@ public class CritterMovement : MonoBehaviour
 
     public void GetFleeingLocation()
     {
-        NavMesh.
+        Vector3 direction     = math.normalize( transform.position - player.position );
+        Vector3 flee_position = transform.position + ( direction * 2 );
+        agent.destination         = flee_position;
+        has_desitination          = true;
     }
 }
