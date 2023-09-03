@@ -11,15 +11,14 @@ public class WaveFunction : MonoBehaviour
     public struct Wave
     {
         public float spawn_rate;
-        public int   critter_spawn_count;
-        public int   max_critter_count;
+        public int   critter_count;
     }
 
     [SerializeField]
     List< Wave > waves;
 
     [SerializeField]
-    List< Vector3 > spawners;
+    List< Transform > spawners;
 
     public int       current_wave;
     public Transform player;
@@ -41,14 +40,18 @@ public class WaveFunction : MonoBehaviour
     void GetSpawner()
     {
         Vector3 spawn_location = new Vector3();
-        foreach( Vector3 spawner in spawners )
+        foreach( Transform spawner in spawners )
         {
-            if( spawner == last_spawner )
+            if( math.length( spawner.position - last_spawner ) < 0.1f )
                 continue;
 
-            if( math.distance( spawner, player.position ) > math.distance( spawn_location, player.position ) )
-                spawn_location = spawner;
+            if( math.distance( spawner.position, player.position ) > math.distance( spawn_location, player.position ) )
+            {
+                spawn_location = spawner.position;
+            }
         }
+        print( spawn_location );
+        last_spawner = spawn_location;
     }
 
     public void NextRound()
