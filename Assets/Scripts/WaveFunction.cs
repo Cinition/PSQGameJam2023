@@ -56,8 +56,11 @@ public class WaveFunction : MonoBehaviour
             spawn_timer = 0;
         }
 
-        if( alive_critter.Count == 0 && spawn_timer > 5.0 )
+        if( spawn_timer > 5.0 )
             NextRound();
+
+        if( alive_critter.Count >= 20 || current_wave > 10 )
+            Application.Quit();
     }
 
     void GetSpawner()
