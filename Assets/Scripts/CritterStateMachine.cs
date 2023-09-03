@@ -34,16 +34,12 @@ public class CritterStateMachine : MonoBehaviour
         on_state_timer += Time.deltaTime;
 
         if( critter_movement.NeedsToFlee() )
-        {
-            on_state_timer = 0.0f;
             current_state = CritterStates.kFleeing;
-        }
-        else if( current_state == CritterStates.kFleeing )
+        else
         {
-            on_state_timer = 0.0f;
             current_state = CritterStates.kWandering;
         }
-
+        
         switch( current_state )
         {
             case CritterStates.kSpawn:     SpawnState();     break;
@@ -80,12 +76,5 @@ public class CritterStateMachine : MonoBehaviour
     void FleeingState()
     {
         critter_movement.GetFleeingLocation();
-
-        if( on_state_timer < 4.0f )
-            return;
-
-        on_state_timer = 0.0f;
-        current_state = CritterStates.kWandering;
-
     }
 }

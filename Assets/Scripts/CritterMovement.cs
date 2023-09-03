@@ -48,7 +48,7 @@ public class CritterMovement : MonoBehaviour
 
     bool IsAtDestination()
     {
-        float epsilon = 0.1f;
+        float epsilon = 1.0f;
 
         if( ( transform.position.x - agent.destination.x ) <= epsilon )
             return true;
@@ -68,8 +68,8 @@ public class CritterMovement : MonoBehaviour
 
     public void GenerateRandomLocation()
     {
-        Vector3 random_location = new Vector3( 
-            Random.Range( map_min.position.x, map_max.position.x ), 
+        Vector3 random_location = new Vector3(
+            Random.Range( map_min.position.x, map_max.position.x ),
             1.0f,
             Random.Range( map_min.position.z, map_max.position.z )
         );
@@ -80,9 +80,6 @@ public class CritterMovement : MonoBehaviour
 
     public void GetFleeingLocation()
     {
-        Vector3 direction     = math.normalize( transform.position - player.position );
-        Vector3 flee_position = transform.position + ( direction * 2 );
-        agent.destination         = flee_position;
-        has_desitination          = true;
+        NavMesh.
     }
 }
