@@ -46,7 +46,6 @@ public class CritterStateMachine : MonoBehaviour
 
         switch( current_state )
         {
-            case CritterStates.kSpawn:     SpawnState();     break;
             case CritterStates.kWandering: WanderingState(); break;
             case CritterStates.kFleeing:   FleeingState();   break;
         }
