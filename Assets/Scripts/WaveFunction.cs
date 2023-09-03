@@ -28,10 +28,13 @@ public class WaveFunction : MonoBehaviour
 
     public int       current_wave;
     public Transform player;
+    public Transform map_min;
+    public Transform map_max;
 
     private Vector3   spawner_pos;
     private float     spawn_timer = 0.0f;
     private int       spawned_critters = 0;
+    private List< GameObject > alive_critter;
 
     // Update is called once per frame
     void Update()
@@ -46,9 +49,15 @@ public class WaveFunction : MonoBehaviour
             GameObject random_critter = critters[Random.Range(0, critters.Count)];
             GameObject critter = Instantiate(random_critter, spawner_pos, Quaternion.identity);
             critter.tag = "Critter";
+            critter.GetComponent< CritterMovement >().map_min = map_min;
+            critter.GetComponent< CritterMovement >().map_max = map_max;
+            critter.GetComponent< CritterMovement >().player  = player;
             spawned_critters++;
             spawn_timer = 0;
         }
+
+        if( alive_critter.Count == 0 && spawn_timer > 5.0 )
+            NextRound();
     }
 
     void GetSpawner()

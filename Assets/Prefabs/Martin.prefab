@@ -88,10 +88,10 @@ NavMeshAgent:
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 600
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
+  m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 0.38792425
   m_BaseOffset: 0.19396213
@@ -114,9 +114,9 @@ MonoBehaviour:
   player: {fileID: 0}
   has_desitination: 0
   flee_radius: 5
-  tired_speed: 2
-  wandering_speed: 4
-  fleeing_speed: 6
+  tired_speed: 3
+  wandering_speed: 6
+  fleeing_speed: 10
 --- !u!114 &3041674426174016197
 MonoBehaviour:
   m_ObjectHideFlags: 0

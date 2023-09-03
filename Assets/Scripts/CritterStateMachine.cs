@@ -25,7 +25,8 @@ public class CritterStateMachine : MonoBehaviour
     void Start()
     {
         critter_movement = GetComponent< CritterMovement >();
-        current_state    = CritterStates.kSpawn;
+        current_state    = CritterStates.kWandering;
+        critter_movement.GenerateRandomLocation();
     }
 
     // Update is called once per frame
@@ -65,26 +66,15 @@ public class CritterStateMachine : MonoBehaviour
 
     void WanderingState()
     {
-        if( critter_movement.has_desitination )
-            return;
-
-        if( on_state_timer < 3.0f )
+        if( critter_movement.has_desitination || on_state_timer < 3.0f )
             return;
 
         on_state_timer = 0.0f;
         critter_movement.GenerateRandomLocation();
-
     }
 
     void FleeingState()
     {
         critter_movement.GetFleeingLocation();
-
-        if( on_state_timer < 4.0f )
-            return;
-
-        on_state_timer = 0.0f;
-        current_state = CritterStates.kWandering;
-
     }
 }
