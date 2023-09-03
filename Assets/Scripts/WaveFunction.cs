@@ -29,10 +29,9 @@ public class WaveFunction : MonoBehaviour
     public int       current_wave;
     public Transform player;
 
-    private Transform current_spawn;
-    private Vector3   last_spawner_pos;
-    private float     spawn_timer;
-    private int       spawned_critters;
+    private Vector3   spawner_pos;
+    private float     spawn_timer = 0.0f;
+    private int       spawned_critters = 0;
 
     // Update is called once per frame
     void Update()
@@ -44,7 +43,10 @@ public class WaveFunction : MonoBehaviour
         if( spawn_timer > waves[ current_wave ].spawn_rate )
         {
             GetSpawner();
-            Instantiate( critters[ Random.Range( 0, critters.Count - 1 ) ], current_spawn );
+            GameObject random_critter = critters[Random.Range(0, critters.Count)];
+            GameObject critter = Instantiate(random_critter, spawner_pos, Quaternion.identity);
+            critter.tag = "Critter";
+            spawned_critters++;
             spawn_timer = 0;
         }
     }
@@ -54,14 +56,14 @@ public class WaveFunction : MonoBehaviour
         Vector3 spawn_location = new Vector3();
         foreach( Transform spawner in spawners )
         {
-            if( math.length( spawner.position - last_spawner_pos ) < 0.1f )
+            if( math.length( spawner.position - spawner_pos ) < 0.1f )
                 continue;
 
             if( math.distance( spawner.position, player.position ) > math.distance( spawn_location, player.position ) )
                 spawn_location = spawner.position;
         }
 
-        last_spawner_pos = spawn_location;
+        spawner_pos = spawn_location;
     }
 
     public void NextRound()

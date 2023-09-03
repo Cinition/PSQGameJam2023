@@ -9,19 +9,18 @@ public class CritterPickUp : MonoBehaviour
 
     public float trashRange;
     public float pickUpRange;
-    private int  maxCrittersHeld = 5;
     private      List<GameObject> heldCritters = new List<GameObject>();
     public       ScoreManager scoreManager;
 
     void Start()
     {
-        critters = GameObject.FindGameObjectsWithTag("Critter");
         player = GameObject.FindGameObjectWithTag("Player");
         trashCan = GameObject.FindGameObjectWithTag("Trash Can");
     }
 
     void Update()
     {
+        critters = GameObject.FindGameObjectsWithTag("Critter");
         if (Input.GetKeyDown(KeyCode.E))
         {
             CheckCritters();
@@ -40,7 +39,7 @@ public class CritterPickUp : MonoBehaviour
     private void PickUp(GameObject critterObject)
     {
         heldCritters.Add(critterObject);
-        critterObject.SetActive(false);
+        Destroy(critterObject);
     }
 
     private void DropAll()
@@ -55,7 +54,7 @@ public class CritterPickUp : MonoBehaviour
         {
             float distanceToPlayer = Vector3.Distance(player.transform.position, critterObject.transform.position);
 
-            if (distanceToPlayer <= pickUpRange && heldCritters.Count < maxCrittersHeld)
+            if (!heldCritters.Contains(critterObject) && distanceToPlayer <= pickUpRange)
             {
                 PickUp(critterObject);
             }
