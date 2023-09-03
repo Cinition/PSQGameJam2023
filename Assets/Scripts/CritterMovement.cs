@@ -62,7 +62,6 @@ public class CritterMovement : MonoBehaviour
     public bool NeedsToFlee()
     {
         float length = math.length( player.position - transform.position );
-        print( length );
         return length < flee_radius;
     }
 

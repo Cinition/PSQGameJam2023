@@ -5,7 +5,7 @@ using Unity.Burst;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class WaveFunction : MonoBehaviour
@@ -34,15 +34,29 @@ public class WaveFunction : MonoBehaviour
     private Vector3   spawner_pos;
     private float     spawn_timer = 0.0f;
     private int       spawned_critters = 0;
-    private List< GameObject > alive_critter;
+    public List< GameObject > alive_critter;
 
     // Update is called once per frame
     void Update()
     {
+        foreach (GameObject item in alive_critter)
+        {
+            if( !item )
+                alive_critter.Remove( item );
+        }
+
+        print( spawn_timer );
+        if( spawn_timer > 10.0 )
+            NextRound();
+
+        if( alive_critter.Count >= 22 || current_wave >= waves.Count )
+            SceneManager.LoadScene( 2 );
+
+        spawn_timer += Time.deltaTime;
+
         if( spawned_critters >= waves[ current_wave ].critter_count )
             return;
 
-        spawn_timer += Time.deltaTime;
         if( spawn_timer > waves[ current_wave ].spawn_rate )
         {
             GetSpawner();
@@ -53,14 +67,9 @@ public class WaveFunction : MonoBehaviour
             critter.GetComponent< CritterMovement >().map_max = map_max;
             critter.GetComponent< CritterMovement >().player  = player;
             spawned_critters++;
+            alive_critter.Add( critter );
             spawn_timer = 0;
         }
-
-        if( spawn_timer > 5.0 )
-            NextRound();
-
-        if( alive_critter.Count >= 20 || current_wave > 10 )
-            Application.Quit();
     }
 
     void GetSpawner()
