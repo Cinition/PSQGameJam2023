@@ -3,7 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
+
+using Random = UnityEngine.Random;
 
 public class WaveFunction : MonoBehaviour
 {
@@ -18,21 +21,30 @@ public class WaveFunction : MonoBehaviour
     List< Wave > waves;
 
     [SerializeField]
+    List< GameObject > critters;
+
+    [SerializeField]
     List< Transform > spawners;
 
     public int       current_wave;
     public Transform player;
 
-    private Vector3 last_spawner;
-    private float   spawn_timer;
+    private Transform current_spawn;
+    private Vector3   last_spawner_pos;
+    private float     spawn_timer;
+    private int       spawned_critters;
 
     // Update is called once per frame
     void Update()
     {
+        if( spawned_critters >= waves[ current_wave ].critter_count )
+            return;
+
         spawn_timer += Time.deltaTime;
         if( spawn_timer > waves[ current_wave ].spawn_rate )
         {
             GetSpawner();
+            Instantiate( critters[ Random.Range( 0, critters.Count - 1 ) ], current_spawn );
             spawn_timer = 0;
         }
     }
@@ -42,19 +54,20 @@ public class WaveFunction : MonoBehaviour
         Vector3 spawn_location = new Vector3();
         foreach( Transform spawner in spawners )
         {
-            if( math.length( spawner.position - last_spawner ) < 0.1f )
+            if( math.length( spawner.position - last_spawner_pos ) < 0.1f )
                 continue;
 
             if( math.distance( spawner.position, player.position ) > math.distance( spawn_location, player.position ) )
-            {
                 spawn_location = spawner.position;
-            }
         }
-        last_spawner = spawn_location;
+
+        last_spawner_pos = spawn_location;
     }
 
     public void NextRound()
     {
-        Wave wave = waves[ current_wave + 1 ];
+        current_wave++;
+        spawn_timer      = 0.0f;
+        spawned_critters = 0;
     }
 }
