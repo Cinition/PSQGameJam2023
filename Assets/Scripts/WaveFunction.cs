@@ -50,7 +50,6 @@ public class WaveFunction : MonoBehaviour
                 spawn_location = spawner.position;
             }
         }
-        print( spawn_location );
         last_spawner = spawn_location;
     }
 
