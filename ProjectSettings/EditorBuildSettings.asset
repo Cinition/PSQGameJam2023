@@ -6,6 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Menus/MainMenuScreen.unity
+    guid: ec4635612fb948e4c8147452cf68aae9
+  - enabled: 1
+    path: Assets/Scenes/In-gameScreen.unity
+    guid: a901117085d06ef4cb9fa629b025d732
+  - enabled: 1
+    path: Assets/Scenes/Menus/EndingScreen.unity
+    guid: 911273c004e3bc9498661cf42975921d
+  - enabled: 0
     path: Assets/Scenes/OskarTesting.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+    guid: f29d0d5f27506054a8fcb3a9c0cdb34b
   m_configObjects: {}
