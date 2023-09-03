@@ -1,20 +1,23 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
+
 public class CritterPickUp : MonoBehaviour
 {
     GameObject[] critters;
     GameObject player;
     Transform critter;
+    TrashCan trashCan; 
 
     public float pickUpRange;
-
+    private int maxCrittersHeld = 5; 
     private List<GameObject> heldCritters = new List<GameObject>();
-    private int maxCrittersHeld = 5;
+
 
     void Start()
     {
         critters = GameObject.FindGameObjectsWithTag("Critter");
         player = GameObject.FindGameObjectWithTag("Player");
+        trashCan = FindObjectOfType<TrashCan>();
     }
 
     void Update()
@@ -26,18 +29,20 @@ public class CritterPickUp : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Q) && heldCritters.Count > 0)
         {
-            DropAll();
+            float distanceToTrashCan = Vector3.Distance(player.transform.position, trashCan.transform.position);
+            if (distanceToTrashCan <= trashCan.trashRange)
+            {
+                DropAll();
+            }
         }
     }
 
     private void PickUp(GameObject critterObject)
     {
         heldCritters.Add(critterObject);
-
         critter = critterObject.transform;
         critter.SetParent(player.transform);
         critter.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-        critter.localScale = Vector3.one;
 
         Rigidbody rb = critter.GetComponent<Rigidbody>();
         BoxCollider boxCollider = critter.GetComponent<BoxCollider>();
@@ -58,7 +63,7 @@ public class CritterPickUp : MonoBehaviour
     {
         foreach (GameObject critterObject in critters)
         {
-            Vector3 distanceToPlayer = player.transform.position - critterObject.transform.position;
+            float distanceToPlayer = Vector3.Distance(player.transform.position, critterObject.transform.position);
             bool isCritterHeld = false;
 
             foreach (GameObject critter in heldCritters)
@@ -70,7 +75,7 @@ public class CritterPickUp : MonoBehaviour
                 }
             }
 
-            if (!isCritterHeld && distanceToPlayer.magnitude <= pickUpRange && heldCritters.Count < maxCrittersHeld)
+            if (!isCritterHeld && distanceToPlayer <= pickUpRange && heldCritters.Count < maxCrittersHeld)
             {
                 PickUp(critterObject);
             }

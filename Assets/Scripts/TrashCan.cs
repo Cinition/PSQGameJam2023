@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class TrashCan : MonoBehaviour
 {
     public float trashRange = 5.0f;
