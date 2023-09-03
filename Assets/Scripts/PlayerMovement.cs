@@ -1,15 +1,11 @@
 using UnityEngine;
+
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField]
-    float moveSpeed;
-    Vector3 limitedVelocity;
+    [SerializeField] float moveSpeed = 5.0f;
+    [SerializeField] float rotationSpeed = 5.0f;
 
-    float horizontalInput;
-    float verticalInput;
-
-    public Vector3 moveDirection;
-
+    Vector3   moveDirection;
     Rigidbody rb;
 
     void Start()
@@ -17,35 +13,34 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
     }
-    void Update()
-    {
-        GatherInput();
-    }
 
     private void FixedUpdate()
     {
+        GatherInput();
         MovePlayer();
     }
 
     private void GatherInput()
     {
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
-        moveDirection = (transform.forward * verticalInput) + (transform.right * horizontalInput);
+        float horizontalInput = Input.GetAxisRaw("Horizontal");
+        float verticalInput = Input.GetAxisRaw("Vertical");
+        moveDirection = new Vector3(horizontalInput, 0.0f, verticalInput).normalized;
     }
 
     private void MovePlayer()
     {
-        Vector3 Velocity = new(rb.velocity.x, 0.0f, rb.velocity.z);
-        if (Velocity.magnitude > moveSpeed)
+        Vector3 velocity = new(rb.velocity.x, 0.0f, rb.velocity.z);
+        if (velocity.magnitude > moveSpeed)
         {
-            limitedVelocity = Velocity.normalized * moveSpeed;
-            rb.velocity = new Vector3(limitedVelocity.x, 0.0f, limitedVelocity.z);
-        }
-        if (moveDirection.magnitude > 1) 
-        {
-            moveDirection = moveDirection.normalized;
+            velocity = velocity.normalized * moveSpeed;
+            rb.velocity = new Vector3(velocity.x, 0.0f, velocity.z);
         }
         rb.AddForce(moveSpeed * 10 * moveDirection, ForceMode.Force);
+
+        if (moveDirection != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
     }
 }
